@@ -29,7 +29,8 @@ def pop():
 print(f'[[정수형 스택 연산 실습 (용량 : {capacity})]]')
 
 while True:
-    menu = int(input('>메뉴 선택 :'))
+    menu = int(input('>메뉴 선택 : '))
+    
     if menu == 0:
         break
     elif menu == 1:
@@ -38,6 +39,9 @@ while True:
     elif menu == 2:
         data = pop()
         print('')
+    elif menu == 3:
+        data = stack[len(stack)-1]
+        print('>[top] 데이터 확인:', data)
 
     print('> 현재 스택 상태', stack)
 
