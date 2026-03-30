@@ -25,6 +25,11 @@ def pop():
         return -1
     else:
         return stack.pop()
+def peek():
+    if isEmpty():
+        return -1
+    else:
+        return stack[len(stack)-1]
 
 print(f'[[정수형 스택 연산 실습 (용량 : {capacity})]]')
 
