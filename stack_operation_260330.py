@@ -34,9 +34,9 @@ def peek():
 print(f'[[정수형 스택 연산 실습 (용량 : {capacity})]]')
 
 while True:
-    print('=======================')
-    print(' 1.push 2.pop 3.peek ')
-    print('=======================')
+    print('============================')
+    print(' 1.push 2.pop 3.peek 0.exit ')
+    print('============================')
     menu = int(input('>메뉴 선택 : '))
     
     if menu == 0:
