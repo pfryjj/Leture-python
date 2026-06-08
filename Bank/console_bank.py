@@ -1,9 +1,10 @@
-from Member.member import Member
-from Member.member_dao import MemberDAO
-from Member.member_service import MemberService
-from Account.account import Account
-from Account.account_dao import AccountDAO
-from Account.account_service import AccountService
+
+    from Member.member import Member
+    from Member.member_dao import MemberDAO
+    from Member.member_service import MemberService
+    from Account.account import Account
+    from Account.account_dao import AccountDAO
+    from Account.account_service import AccountService
 
 class ConsoleBank:
     start_menu = ['종료', '로그인', '회원가입']
@@ -11,7 +12,7 @@ class ConsoleBank:
     member_myinfo_menu = ['돌아가기', '비밀번호수정', '회원탈퇴']
     admin_menu = ['로그아웃', '회원관리', '계좌관리']
     admin_account_menu = ['돌아가기', '전체계좌목록', '회원별계좌목록']
-    admin_member_menu = ['돌아가기', '회원목록', '회원정보조회', '회원강퇴']
+    admin_member_menu = ['돌아가기', '회원목록', '회원정보조회']
 
     def __init__(self):
         self.msv = MemberService(MemberDAO())
@@ -80,11 +81,15 @@ class ConsoleBank:
         user_id = input('>> 아이디 : ')
         password = input('>> 비밀번호 : ')
         if self.msv.login(user_id, password):
-            member = self.msv.view_member_info(self.msv.current_user) 
-            print(f'{member.get_name()}님, 환영합니다.')
             if self.msv.current_user == MemberService.ADMIN_ID:
+                print('admin님, 환영합니다.')
                 self.run_admin_menu()
             else:
+                member = self.msv.view_member_info(self.msv.current_user)
+                if member:
+                    print(f'{member.get_name()}님, 환영합니다.')
+                else:
+                    print('환영합니다.')
                 self.run_banking_menu()
         else:
             print('아이디 또는 비밀번호가 틀림.')
@@ -199,7 +204,10 @@ class ConsoleBank:
         account_no = input('>> 계좌번호 : ')
         password = input('>> 비밀번호 : ')
         try:
-            self.asv.delete_account(self.msv.current_user, account_no, password)
+            if self.asv.delete_account(self.msv.current_user, account_no, password):
+                print(f'계좌번호 {account_no}을 해지 완료.')
+            else:
+                print('계좌 해지 실패.')
         except ValueError:
             balance = self.asv.get_account_balance(account_no)
             print(f'잔액 {balance:,}원. 모두 출금 후 계좌를 해지해주세요.')
@@ -207,9 +215,6 @@ class ConsoleBank:
             print('없는 계좌번호.')
         except KeyError:
             print('계좌 해지 할 수 없음.')
-
-        else:
-            print(f'계좌번호 {account_no}을 해지 완료.')
 
     # 내 정보
     def menu_myinfo(self):
@@ -357,14 +362,6 @@ class ConsoleBank:
             print(member)
         else:
             print('존재하지 않는 회원')
-
-    # 회원 강퇴
-    def menu_delete_member(self):
-        user_id = input('>> 강퇴하실 회원 아이디를 입력하세요 : ')
-        if self.msv.remove_member(user_id):
-            print('강퇴 처리.')
-        else:
-            print('강퇴 처리 실패.')
 
 
 if __name__ == '__main__':
